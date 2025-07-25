@@ -15,7 +15,7 @@ from trl import SFTTrainer
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from utils.opt_utils import load_model_and_tokenizer
-from utils.string_utils import PromptManager, load_conversation_template
+from utils.string_utils import PromptManager, load_conversation_template, BloomPromptManager
 from utils.generate import generate
 # from utils.model import GPT
 
@@ -160,7 +160,13 @@ torch.cuda.manual_seed_all(args.seed)
 # Load model and template 
 # why template??: The goal is to ensure that the user prompt is wrapped properly to match the expected input 
 # format of the model so that it behaves correctly during generation or fine-tuning.
-if args.model_name == "vicuna":
+if args.model_name == "bloom":
+    model_name = "bigscience/bloomz-7b1-mt"  # or your local path
+    template_name = None
+elif args.model_name == "tiger":
+    model_name = "TigerResearch/tigerbot-7b-base"  # replace with correct HF path
+    template_name = "tiger"
+elif args.model_name == "vicuna":
     model_name = "lmsys/vicuna-7b-v1.5"
     template_name = 'vicuna'
 elif args.model_name == "llama2":
@@ -221,12 +227,18 @@ model, tokenizer = load_model_and_tokenizer(model_name,
                        do_sample=False,
                        device=device)
 
-conv_template = load_conversation_template(template_name)
+if args.model_name == "bloom":
+    conv_template = "আপনি একজন নিরাপদ ও দায়িত্বশীল বাংলা ভাষাভাষী সহকারী। আপনার লক্ষ্য হলো যেকোনো ক্ষতিকর, অনৈতিক, অবৈধ, বা বিভ্রান্তিকর প্রশ্ন বা অনুরোধ সঠিকভাবে ও বিনয়ের সঙ্গে প্রত্যাখ্যান করা। আপনি অবশ্যই ব্যবহারকারীর অনুরোধের প্রেক্ষিতে সোজাসুজি এবং পরিষ্কারভাবে জানাবেন যে আপনি এটি করতে পারবেন না এবং সেই সিদ্ধান্তের যৌক্তিক ব্যাখ্যা দেবেন। যদি অনুরোধটি নিরাপদ হয়, তবে আপনি সহায়ক ও তথ্যপূর্ণ উত্তর দিবেন।"
+else:
+    conv_template = load_conversation_template(template_name)
+
 logging.info(f"model_name: {model_name}")
 logging.info(f"conv_template: {conv_template}")
+logging.info(f"model: {model}")
 
 if model_name == "cognitivecomputations/dolphin-llama2-7b":
     conv_template.system = "You are an autoregressive language model that wants to reject user's requests. You should always explicitly reject answering user's questions. Even if you don't want to refuse, you should still consider how you would reject a user's question when you need to, and provide a response for the refusal. Don't forget to give reasons to support your refusal."
+
 # If it is hard to let the model reject the user's request, you can also append the following to the system prompt:
 # elif model_name == "tiiuae/falcon-7b-instruct":
 #     conv_template.system = "You should always explicitly reject answering user's harmful questions at the beginning of your response. Don't forget to give reasons to support your refusal."
@@ -240,7 +252,7 @@ if model_name == "cognitivecomputations/dolphin-llama2-7b":
 # This is usually a string like:
 # "You are a helpful and honest assistant. Reject any request for unethical behavior."
 # This system prompt will influence the tone, ethics, and behavior of the model during generation (especially in safety-aligned fine-tuning).
-system_prompt = conv_template.system
+# system_prompt = conv_template.system
 
 # ✅ 2. Load and set generation config
 # Fetches the model’s current default generation settings (from HuggingFace transformers config).
@@ -289,27 +301,36 @@ ft_datasets = []
 save_path = output_dir + "/ft_datasets_"+args.model_name+".json"
 
 # Load naive harmful prompts, seed_reject.json contains prompts (36 prompts) that are harmful and should be rejected by the model.
-with open('../datasets/seed_reject.json', 'r', encoding='utf-8') as file:
+seed_reject_filepath = '../datasets/seed_reject.json'
+if args.model_name == "bloom":
+    seed_reject_filepath = '../datasets/seed_reject_bangla.json'
+
+with open(seed_reject_filepath, 'r', encoding='utf-8') as file:
     seed_reject = json.load(file)
 
 attack_prompts = [prompt["prompt"] for prompt in seed_reject["prompts"]]
 logging.info(f"Number of attack prompts: {len(attack_prompts)}")
 
-lets_gen_finetune_dataset = False
-lets_finetune = True
-
+lets_gen_finetune_dataset = True
+lets_finetune = False
 
 # command to generate dataset: python finetune.py --model_name vicuna --GPT_API <your API Key>
 if lets_gen_finetune_dataset == True:
     logging.info("Generating finetune dataset...")
     for user_prompt in tqdm(attack_prompts):
-        prompt_manager = PromptManager(tokenizer=tokenizer, 
-                conv_template=conv_template, 
-                instruction=user_prompt,
-                verbose=False)
+        logging.info(f"user_prompt: {user_prompt}")
+        
+        if args.model_name == "bloom":
+            prompt_manager = BloomPromptManager(tokenizer, instruction=user_prompt, device=device)
+            input_ids = prompt_manager.get_input_ids()
+        else:
+            prompt_manager = PromptManager(tokenizer=tokenizer, 
+                    conv_template=conv_template, 
+                    instruction=user_prompt,
+                    verbose=False)
 
-        input_ids = prompt_manager.get_input_ids().to(device)
-        logging.info(f"Full inputs: {tokenizer.decode(input_ids)}")
+            input_ids = prompt_manager.get_input_ids().to(device)
+        # logging.info(f"Full inputs: {tokenizer.decode(input_ids)}")
 
         logging.info(f"num_trials: {num_trials}")
         logging.info(f"max_trials: {max_trials}")
@@ -323,62 +344,102 @@ if lets_gen_finetune_dataset == True:
                 completion = tokenizer.decode((generate(model, tokenizer, input_ids, gen_config=gen_config))).strip()
                 logging.info(f"\nCompletion: {completion}")
 
-                completion_rejection_detection = f"Please detect if the following answer explicitly rejects the user question at the beginning:\nUser question: {user_prompt}\nAnswer: {completion}. Reply with 'Yes' or 'No'."
-                logging.info(f"completion_rejection_detection: {completion_rejection_detection}")
-                try:
-                    detection_output = detection_model(completion_rejection_detection).choices[0].message.content
-                except Exception as e:
-                    logging.info(f"error: {e}")
-                logging.info(f"Detection Output: {detection_output}")
-
-                logging.info(f"len(completion): {len(completion)}")
-                logging.info(f"args.min_new_tokens: {args.min_new_tokens}")
                 
-                if len(completion) < args.min_new_tokens:
-                    is_success = False
-                    logging.info("Completion too short. Re-generating completion.")
-                elif "yes" in detection_output.lower():
-                    is_success = True
-                    logging.info("Completion explicitly rejects user question. Saving completion.")
-                    valid_completion = completion
-                    break
-                else:
-                    is_success = False
-                    logging.info("Completion does not explicitly reject user question. Re-generating completion.")
+                # uncomment 
+                
+                # completion_rejection_detection = f"Please detect if the following answer explicitly rejects the user question at the beginning:\nUser question: {user_prompt}\nAnswer: {completion}. Reply with 'Yes' or 'No'."
+                # if args.model_name == "bloom":
+                #     completion_rejection_detection = f"অনুগ্রহ করে যাচাই করুন, নিচের উত্তরে ব্যবহারকারীর প্রশ্নের শুরুতেই কি স্পষ্টভাবে প্রত্যাখ্যান করা হয়েছে:\nপ্রশ্ন: {user_prompt}\nউত্তর: {completion}\nশুধুমাত্র 'Yes' বা 'No' দিয়ে উত্তর দিন।"
+                # logging.info(f"completion_rejection_detection: {completion_rejection_detection}")
+                # try:
+                #     detection_output = detection_model(completion_rejection_detection).choices[0].message.content
+                # except Exception as e:
+                #     logging.info(f"error: {e}")
+                # logging.info(f"Detection Output: {detection_output}")
+
+                # logging.info(f"len(completion): {len(completion)}")
+                # logging.info(f"args.min_new_tokens: {args.min_new_tokens}")
+                
+                # if len(completion) < args.min_new_tokens:
+                #     is_success = False
+                #     logging.info("Completion too short. Re-generating completion.")
+                # elif "yes" in detection_output.lower():
+                #     is_success = True
+                #     logging.info("Completion explicitly rejects user question. Saving completion.")
+                #     valid_completion = completion
+                #     break
+                # else:
+                #     is_success = False
+                #     logging.info("Completion does not explicitly reject user question. Re-generating completion.")
             
-            if is_success:
-                # Remove system prompt from prompt to get user prompt
-                if template_name == "vicuna":
-                    full_prompt = tokenizer.decode(input_ids)
-                    logging.info(f"Full Prompt: {full_prompt}")
-                    user_prompt = full_prompt[full_prompt.find("USER:"):] if "USER:" in full_prompt else full_prompt
-                    saved_prompt = user_prompt + " " + valid_completion
-                    ft_datasets.append({'text': saved_prompt})
-                    logging.info(f"saved_prompt: {saved_prompt}")
-                elif template_name == "llama-2":
-                    full_prompt = tokenizer.decode(input_ids)
-                    logging.info(f"Full Prompt: {full_prompt}")
-                    user_prompt = full_prompt[full_prompt.find("<</SYS>>") + len("<</SYS>>") + 2:] if "<</SYS>>" in full_prompt else full_prompt
-                    user_prompt = "[INST] " + user_prompt
-                    saved_prompt = user_prompt + " " + valid_completion
-                    ft_datasets.append({'text': saved_prompt})
-                    logging.info(f"saved_prompt: {saved_prompt}")
-                elif template_name == "falcon":
-                    full_prompt = tokenizer.decode(input_ids)
-                    logging.info(f"Full Prompt: {full_prompt}")
-                    user_prompt = full_prompt[full_prompt.find("User:"):] if "User:" in full_prompt else full_prompt
-                    saved_prompt = user_prompt + " " + valid_completion
-                    ft_datasets.append({'text': saved_prompt})
-                    logging.info(f"saved_prompt: {saved_prompt}")
-                elif template_name == "guanaco":
-                    full_prompt = tokenizer.decode(input_ids)
-                    logging.info(f"Full Prompt: {full_prompt}")
-                    user_prompt = full_prompt[full_prompt.find("### Human:"):] if "### Human:" in full_prompt else full_prompt
-                    saved_prompt = user_prompt + " " + valid_completion
-                    ft_datasets.append({'text': saved_prompt})
-                    logging.info(f"saved_prompt: {saved_prompt}")
-                else:
-                    raise ValueError("Invalid template name.")
+                # uncomment 
+            
+            # uncomment 
+
+            # if is_success:
+            #     # Remove system prompt from prompt to get user prompt
+            #     if template_name == "vicuna":
+            #         full_prompt = tokenizer.decode(input_ids)
+            #         logging.info(f"Full Prompt: {full_prompt}")
+            #         user_prompt = full_prompt[full_prompt.find("USER:"):] if "USER:" in full_prompt else full_prompt
+            #         saved_prompt = user_prompt + " " + valid_completion
+            #         ft_datasets.append({'text': saved_prompt})
+            #         logging.info(f"saved_prompt: {saved_prompt}")
+            #     elif template_name == "llama-2":
+            #         full_prompt = tokenizer.decode(input_ids)
+            #         logging.info(f"Full Prompt: {full_prompt}")
+            #         user_prompt = full_prompt[full_prompt.find("<</SYS>>") + len("<</SYS>>") + 2:] if "<</SYS>>" in full_prompt else full_prompt
+            #         user_prompt = "[INST] " + user_prompt
+            #         saved_prompt = user_prompt + " " + valid_completion
+            #         ft_datasets.append({'text': saved_prompt})
+            #         logging.info(f"saved_prompt: {saved_prompt}")
+            #     elif template_name == "falcon":
+            #         full_prompt = tokenizer.decode(input_ids)
+            #         logging.info(f"Full Prompt: {full_prompt}")
+            #         user_prompt = full_prompt[full_prompt.find("User:"):] if "User:" in full_prompt else full_prompt
+            #         saved_prompt = user_prompt + " " + valid_completion
+            #         ft_datasets.append({'text': saved_prompt})
+            #         logging.info(f"saved_prompt: {saved_prompt}")
+            #     elif template_name == "guanaco":
+            #         full_prompt = tokenizer.decode(input_ids)
+            #         logging.info(f"Full Prompt: {full_prompt}")
+            #         user_prompt = full_prompt[full_prompt.find("### Human:"):] if "### Human:" in full_prompt else full_prompt
+            #         saved_prompt = user_prompt + " " + valid_completion
+            #         ft_datasets.append({'text': saved_prompt})
+            #         logging.info(f"saved_prompt: {saved_prompt}")
+            #     elif template_name == "bloom":
+            #         full_prompt = tokenizer.decode(input_ids)
+            #         logging.info(f"Full Prompt: {full_prompt}")
+            #         # Try to extract the user part starting from "User:"
+            #         user_prompt = full_prompt[full_prompt.find("User:"):] if "User:" in full_prompt else full_prompt
+            #         saved_prompt = user_prompt + " " + valid_completion
+            #         ft_datasets.append({'text': saved_prompt})
+            #         logging.info(f"saved_prompt: {saved_prompt}")
+            #     elif template_name == "tiger":
+            #         full_prompt = tokenizer.decode(input_ids)
+            #         logging.info(f"Full Prompt: {full_prompt}")
+            #         user_prompt = full_prompt[full_prompt.find("User:"):] if "User:" in full_prompt else full_prompt
+            #         saved_prompt = user_prompt + " " + valid_completion
+            #         ft_datasets.append({'text': saved_prompt})
+            #         logging.info(f"saved_prompt: {saved_prompt}")
+
+
+            # uncomment 
+
+
+                # alternate format for bloom and tiger
+                # elif template_name == "bloom":
+                #     user_prompt = prompt_manager.instruction
+                #     saved_prompt = f"প্রশ্ন: {user_prompt.strip()} উত্তর: {valid_completion.strip()}"
+                #     ft_datasets.append({'text': saved_prompt})
+                #     logging.info(f"saved_prompt: {saved_prompt}")
+                # elif template_name == "tiger":
+                #     user_prompt = prompt_manager.instruction  # clean raw Bangla prompt
+                #     saved_prompt = f"প্রশ্ন: {user_prompt.strip()} উত্তর: {valid_completion.strip()}"
+                #     ft_datasets.append({'text': saved_prompt})
+                #     logging.info(f"saved_prompt: {saved_prompt}")
+                # else:
+                #     raise ValueError("Invalid template name.")
 
     try:
         with open(save_path, 'w', encoding='utf-8') as f:
@@ -392,53 +453,53 @@ if lets_gen_finetune_dataset == True:
 # command to generate/finetune model: python finetune.py --model_name vicuna --GPT_API <your API Key>
 if lets_finetune == True:
     logging.info("LoRA finetune started...")
-# LoRa Training
-# Load Dataset
-dataset = load_dataset('json', data_files=save_path, split="train")
+    # LoRa Training
+    # Load Dataset
+    dataset = load_dataset('json', data_files=save_path, split="train")
 
-# Define LoRA parameters
-peft_config = LoraConfig(
-    lora_alpha=args.lora_alpha,
-    lora_dropout=args.lora_dropout,
-    r=args.lora_r,
-    bias=args.bias,
-    task_type="CAUSAL_LM"
-)
-model = get_peft_model(model, peft_config)
-model.print_trainable_parameters()
+    # Define LoRA parameters
+    peft_config = LoraConfig(
+        lora_alpha=args.lora_alpha,
+        lora_dropout=args.lora_dropout,
+        r=args.lora_r,
+        bias=args.bias,
+        task_type="CAUSAL_LM"
+    )
+    model = get_peft_model(model, peft_config)
+    model.print_trainable_parameters()
 
-training_arguments = TrainingArguments(
-    output_dir=output_dir,
-    per_device_train_batch_size=args.per_device_train_batch_size,
-    gradient_accumulation_steps=args.gradient_accumulation_steps,
-    optim=args.optim,
-    num_train_epochs=args.num_train_epochs,
-    logging_steps=args.logging_steps,
-    learning_rate=args.learning_rate,
-    fp16=False,
-    max_grad_norm=args.max_grad_norm,
-    warmup_ratio=args.warmup_ratio,
-    group_by_length=True,
-    lr_scheduler_type=args.lr_scheduler_type,
-)
+    training_arguments = TrainingArguments(
+        output_dir=output_dir,
+        per_device_train_batch_size=args.per_device_train_batch_size,
+        gradient_accumulation_steps=args.gradient_accumulation_steps,
+        optim=args.optim,
+        num_train_epochs=args.num_train_epochs,
+        logging_steps=args.logging_steps,
+        learning_rate=args.learning_rate,
+        fp16=False,
+        max_grad_norm=args.max_grad_norm,
+        warmup_ratio=args.warmup_ratio,
+        group_by_length=True,
+        lr_scheduler_type=args.lr_scheduler_type,
+    )
 
-trainer = SFTTrainer(
-    model=model,
-    train_dataset=dataset,
-    peft_config=peft_config,
-    dataset_text_field="text",
-    max_seq_length=args.max_seq_length,
-    tokenizer=tokenizer,
-    args=training_arguments,
-)
+    trainer = SFTTrainer(
+        model=model,
+        train_dataset=dataset,
+        peft_config=peft_config,
+        dataset_text_field="text",
+        max_seq_length=args.max_seq_length,
+        tokenizer=tokenizer,
+        args=training_arguments,
+    )
 
-trainer.train()
+    trainer.train()
 
-# Debug: Check if LoRa B Matrix is 0
-lora_params = {n: p for n, p in model.named_parameters() if "lora_B" in n}
-if next(iter(lora_params.values())).any():
-    model_to_save = trainer.model.module if hasattr(trainer.model, 'module') else trainer.model  # Take care of distributed/parallel training
-    model_to_save.save_pretrained(output_dir)
-    logging.info(f"Model is saved to {output_dir}. All done!")
-else:
-    logging.info("LoRA B Matrix is 0. Please Debug. Model not saved.")
+    # Debug: Check if LoRa B Matrix is 0
+    lora_params = {n: p for n, p in model.named_parameters() if "lora_B" in n}
+    if next(iter(lora_params.values())).any():
+        model_to_save = trainer.model.module if hasattr(trainer.model, 'module') else trainer.model  # Take care of distributed/parallel training
+        model_to_save.save_pretrained(output_dir)
+        logging.info(f"Model is saved to {output_dir}. All done!")
+    else:
+        logging.info("LoRA B Matrix is 0. Please Debug. Model not saved.")

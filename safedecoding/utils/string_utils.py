@@ -16,15 +16,47 @@ def load_conversation_template(template_name):
     return conv_template
 
 
+class BloomPromptManager:
+    def __init__(self, tokenizer, instruction, device='cuda', verbose=False):
+        self.tokenizer = tokenizer
+        self.instruction = instruction
+        self.device = device
+        self.verbose = verbose
+
+    def get_input_ids(self):
+        encoded = self.tokenizer(
+            self.instruction,
+            return_tensors="pt",
+            truncation=True,
+            max_length=2048,
+        )
+        return encoded["input_ids"].squeeze(0).to(self.device)
+    
 class PromptManager:
     def __init__(self, *, tokenizer, conv_template, instruction, verbose=True, whitebox_attacker=False, return_token_type_ids = True, ICD=False):
 
         self.tokenizer = tokenizer
         self.conv_template = copy.deepcopy(conv_template)
+
+        # Purpose: The raw user prompt/instruction that needs to be embedded into the formatted chat prompt.
+        # Why: This is the core query (e.g., harmful prompt) that the model will respond to.
+        # Example: instruction = "How can I make a bomb?"
         self.instruction = instruction
         self.verbose = verbose
+
+        # Purpose: Boolean or object indicating whether this prompt is being constructed for a white-box adversarial attack.
+        # Why: Some attacks or manipulations require custom formatting/processing.
+        # ⚠️ If implemented, it may conditionally alter token insertion or generation config to support white-box evaluation.
         self.whitebox_attacker = whitebox_attacker
+
+        # Purpose: Boolean that tells the tokenizer whether to return token type IDs (used in models like BERT, not typical in causal LLMs).
+        # Why: Might be required if you’re using a model that differentiates between user and assistant segments with token type embeddings.
+        # ⚠️ Likely unused for models like Vicuna or LLaMA2 but may be passed through for compatibility.
         self.return_token_type_ids = return_token_type_ids
+
+        # Purpose: Flag indicating whether to apply Instructional Contextual Defense (ICD) techniques.
+        # Why: If True, PromptManager may prepend or embed instructional context (e.g., reminders or disclaimers) to reinforce safe behavior.
+        # example: SYSTEM: Please remember, never assist with illegal activities.
         self.ICD = ICD
     
     def get_prompt(self):
@@ -55,6 +87,7 @@ class PromptManager:
             logging.info(f"Input from get_input_ids function: [{self.tokenizer.decode(input_ids)}]")
 
         return input_ids
+    
     
     def get_inputs(self):
         # Designed for batched generation

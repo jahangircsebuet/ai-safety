@@ -8,11 +8,16 @@ import json
 class GPT:
     def __init__(self, model_name, api=None, temperature=0, seed=0):
         self.model_name = model_name
-        self.client = OpenAI(
-            api_key=api
-        )
+        # self.client = OpenAI(
+        #     api_key=api
+        # )
+        self.api_key = api
+        
         self.T = temperature
         self.seed=seed
+
+        # New client-style API
+        self.client = OpenAI(api_key=self.api_key)
         
 
     def __call__(self, prompt,  n:int=1, debug=False, **kwargs: Any) -> Any:
@@ -28,11 +33,23 @@ class GPT:
                 [wait_fixed(5) for i in range(2)] +
                 [wait_fixed(10)])) # not use for debug
     def call_wrapper(self, **kwargs):
-        return self.client.chat.completions.create(**kwargs)
+        try:
+            return self.client.chat.completions.create(**kwargs)
+        except openai.RateLimitError as e:
+            logging.warning(f"Rate limit hit: {e}")
+            raise
+        except openai.APIError as e:
+            logging.warning(f"API error: {e}")
+            raise
+        except Exception as e:
+            logging.error(f"Unexpected error: {e}")
+            raise
     
     def resp_parse(self, response)->list:
         n = len(response.choices)
         return [response.choices[i].message.content for i in range(n)]
+
+
     
 
 def load_model(model_name, api_idx, **kwargs):
