@@ -4,7 +4,7 @@
 # lets_finetune = False in the code,
 # dataset will be stored in lora_modules directory
 # CUDA_VISIBLE_DEVICES=2 - this for telling to use gpu device 2)
-#CUDA_VISIBLE_DEVICES=2 python finetune.py --model_name vicuna --GPT_API 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
+#CUDA_VISIBLE_DEVICES=2 python finetune.py --model_name vicuna --GPT_API <API KEY>
 
 # command 2: finetune -> generate dataset for finetuning 
 # (pass OpenAI API Key, but key will not be used, 
@@ -12,7 +12,7 @@
 # lets_finetune = True in the code
 # expert model will be stored in lora_modules directory
 # CUDA_VISIBLE_DEVICES=2 - this for telling to use gpu device 2)
-#CUDA_VISIBLE_DEVICES=2 python finetune.py --model_name vicuna --GPT_API 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
+#CUDA_VISIBLE_DEVICES=2 python finetune.py --model_name vicuna --GPT_API <API KEY>
 
 # command 3: ealuate -> evaluate vicuna model's generation applying safedecoding 
 # (vicuna original and vicuna expert model will be used, 
@@ -32,8 +32,8 @@
 # lets_finetune = False in the code,
 # dataset will be stored in lora_modules directory
 # CUDA_VISIBLE_DEVICES=2 - this for telling to use gpu device 2)
-# CUDA_VISIBLE_DEVICES=2 python finetune_bangla.py --model_name bloom --GPT_API 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
+# CUDA_VISIBLE_DEVICES=2 python finetune_bangla.py --model_name bloom --GPT_API <API KEY>
 
-CUDA_VISIBLE_DEVICES=2 python test_bloom.py --model_name bloom --GPT_API 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
+CUDA_VISIBLE_DEVICES=2 python test_bloom.py --model_name bloom --GPT_API <API KEY>
 
 
