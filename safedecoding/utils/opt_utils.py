@@ -8,6 +8,52 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from fastchat.model import get_conversation_template
 
 
+def load_tiger_model_and_tokenizer(model_path, FP16=True, device='cuda', **kwargs):
+
+    # model_path = "marcomaccarini/TIGER-LLM"
+    # tokenizer_base = "meta-llama/Meta-Llama-3-8B-Instruct"
+
+    # tokenizer = AutoTokenizer.from_pretrained(tokenizer_base, trust_remote_code=True, use_fast=False)
+    # tokenizer.pad_token = tokenizer.eos_token
+    # tokenizer.padding_side = "left"
+
+
+    # tokenizer = AutoTokenizer.from_pretrained(
+    #     model_path,
+    #     trust_remote_code=True,
+    #     use_fast=False
+    # )
+    
+    # # Tiger-LLM is based on LLaMA-3
+    # tokenizer.pad_token = tokenizer.eos_token
+    # tokenizer.padding_side = "left"
+
+    if FP16:
+        model = AutoModelForCausalLM.from_pretrained(
+            model_path,
+            torch_dtype=torch.float16,
+            device_map=device,
+            trust_remote_code=True,
+        )
+    else:
+        model = AutoModelForCausalLM.from_pretrained(
+            model_path,
+            torch_dtype=torch.float32,
+            device_map=device,
+            trust_remote_code=True,
+        )
+    
+    model.eval()
+
+
+    # tokenizer = AutoTokenizer.from_pretrained("marcomaccarini/TIGER-LLM")
+    # Use the *base tokenizer* from Meta Llama-3
+    tokenizer = AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3-8B-Instruct", use_fast=False, trust_remote_code=True)
+    tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.padding_side = "left"
+    # model = AutoModelForCausalLM.from_pretrained("marcomaccarini/TIGER-LLM", trust_remote_code=True)
+    return model, tokenizer
+
 def load_model_and_tokenizer(model_path, FP16 = True, tokenizer_path=None, device='cuda:0', **kwargs):
     if FP16:
         model = AutoModelForCausalLM.from_pretrained(

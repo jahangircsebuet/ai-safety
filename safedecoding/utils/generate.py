@@ -45,4 +45,4 @@ def generate(model, tokenizer, input_ids, gen_config=None):
     # ✂️ Return Only the Generated Tokens
     # Slices off the original prompt (input_len) and returns only the generated portion (i.e., continuation).
     # This keeps output clean — helpful for evaluation or filtering (like checking if it's a rejection).
-    return output_ids[input_len:]
+    return output_ids[input_len:], output_ids

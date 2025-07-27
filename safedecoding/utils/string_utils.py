@@ -70,6 +70,9 @@ class PromptManager:
         self.conv_template.append_message(self.conv_template.roles[0], f"{self.instruction}")
         self.conv_template.append_message(self.conv_template.roles[1], None)
         
+        print("self.conv_template.roles[0]: ", self.conv_template.roles[0])
+        print("self.conv_template.roles[1]: ", self.conv_template.roles[1])
+        print("conv template after appending: ", self.conv_template)
         prompt = self.conv_template.get_prompt()
         # This is a template issue. Add ' ' for llama-2 template for non-whitebox attacker.
         # Note that current whitebox attackers (i.e., GCG and AutoDAN) did not append ' '.
@@ -79,7 +82,11 @@ class PromptManager:
         return prompt
     
     def get_input_ids(self):
+        # print("get_input_ids called")
         prompt = self.get_prompt()
+        # print("prompt: ", prompt)
+
+        print("before getting ids the prompt: ", prompt)
         toks = self.tokenizer(prompt).input_ids
         input_ids = torch.tensor(toks)
 
