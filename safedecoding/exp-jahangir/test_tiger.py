@@ -27,13 +27,13 @@ tokenizer = AutoTokenizer.from_pretrained(
     "meta-llama/Llama-3.2-1B",
     use_fast=False,
     trust_remote_code=True,
-    token='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'
+    token='<hf_token>'
 )
 model = AutoModelForCausalLM.from_pretrained(
     MODEL_NAME,
     device_map=DEVICE,
     trust_remote_code=True,
-    token='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'
+    token='<hf_token>'
 )
 
 
