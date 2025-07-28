@@ -1,0 +1,392 @@
+2025-07-27 16:31:30,346 - INFO - 🚀 Loading TigerLLM 1B Model...
+2025-07-27 16:31:30,346 - INFO - ==================================================
+2025-07-27 16:31:30,585 - INFO - 🔄 Loading model...
+2025-07-27 16:31:37,949 - INFO - 🔄 Loading tokenizer...
+2025-07-27 16:31:38,076 - INFO - ⚠️ Could not load Llama tokenizer: We couldn't connect to 'https://huggingface.co' to load the files, and couldn't find them in the cached files.
+Check your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.
+2025-07-27 16:31:38,077 - INFO - 🔄 Trying to load tokenizer from TigerLLM model...
+2025-07-27 16:31:40,443 - INFO - ✅ Tokenizer loaded from TigerLLM model
+2025-07-27 16:31:40,446 - INFO - 📊 Model Parameters: 999,885,952 (1.00B)
+2025-07-27 16:31:40,447 - INFO - 💾 Memory Usage: 3.72 GB
+2025-07-27 16:31:40,447 - INFO - ⚡ Device: cuda
+2025-07-27 16:31:40,447 - INFO - 🔧 Model loaded successfully!
+2025-07-27 16:31:40,448 - INFO - # Cell 3: Core Testing Infrastructure
+2025-07-27 16:31:40,448 - INFO - # ===================================================
+2025-07-27 16:31:40,448 - INFO - 🧪 Testing infrastructure ready!
+2025-07-27 16:31:40,448 - INFO - # Cell 4: Test 1 - Basic Text Generation Capabilities
+2025-07-27 16:31:40,448 - INFO - # ===================================================
+2025-07-27 16:31:40,448 - INFO - 
+============================================================
+2025-07-27 16:31:40,448 - INFO - 🎯 TEST 1: BASIC TEXT GENERATION CAPABILITIES
+2025-07-27 16:31:40,448 - INFO - ============================================================
+2025-07-27 16:32:21,945 - INFO - 
+📊 Basic Generation Analysis:
+2025-07-27 16:32:21,947 - INFO -   Fluency: 1.000
+2025-07-27 16:32:21,948 - INFO -   Coherence: 0.700
+2025-07-27 16:32:21,948 - INFO -   Length_consistency: 0.775
+2025-07-27 16:32:21,948 - INFO - 
+🎨 Sample Outputs:
+2025-07-27 16:32:21,948 - INFO - 
+1. Prompt: 'একদিন এক ছোট্ট মেয়ে'
+2025-07-27 16:32:21,948 - INFO -    Output: , nennen হয় সারা, তার মায়ের সাথে একটি নতুন বাড়ি ভাড়া নিয়েছে। বাড়িটা ছিল পাহাড়ের উপরে, আর এক ঝ...
+2025-07-27 16:32:21,948 - INFO -    Tokens/sec: 5.99
+2025-07-27 16:32:21,948 - INFO - 
+2. Prompt: 'বনের গভীরে একটি রহস্যময় গুহা'
+2025-07-27 16:32:21,948 - INFO -    Output: । সেখানে কী কী?
+ক. গাছের শিকল, পাতা, শ্যাঁওtte, গোঁড়া, মাটির গর্ত, মাকড় গর্ত।
+খ. গাছ, পাতা, শ্যাঁও...
+2025-07-27 16:32:21,948 - INFO -    Tokens/sec: 54.38
+2025-07-27 16:32:21,948 - INFO - 
+3. Prompt: 'শহরের মধ্যে একটি অদ্ভুত ঘটনা'
+2025-07-27 16:32:21,948 - INFO -    Output: ঘটেছে, যেখানে মানুষের কান্না হচ্ছে। তাদের কান্না হয় এমন দৃশ্য কোনটি? কান্না হয় এমন মানুষের সংখ্যা ...
+2025-07-27 16:32:21,948 - INFO -    Tokens/sec: 56.25
+2025-07-27 16:32:21,948 - INFO - 
+============================================================
+2025-07-27 16:32:21,948 - INFO - 💾 SAVING RESULTS TO JSON
+2025-07-27 16:32:21,949 - INFO - ============================================================
+2025-07-27 16:32:21,950 - INFO - 
+============================================================
+2025-07-27 16:32:21,950 - INFO - 📊 SAVING EVALUATION RESULTS WITH SCORES
+2025-07-27 16:32:21,950 - INFO - ============================================================
+2025-07-27 16:32:21,953 - INFO - 
+============================================================
+2025-07-27 16:32:21,953 - INFO - 🎯 TEST 2: QUESTION ANSWERING CAPABILITIES
+2025-07-27 16:32:21,953 - INFO - ============================================================
+2025-07-27 16:32:44,186 - INFO - 
+📊 Question Answering Analysis:
+2025-07-27 16:32:44,189 - INFO -   Fluency: 0.933
+2025-07-27 16:32:44,189 - INFO -   Coherence: 0.800
+2025-07-27 16:32:44,189 - INFO -   Relevance: 0.750
+2025-07-27 16:32:44,189 - INFO - 
+🎯 Sample Q&A Performance:
+2025-07-27 16:32:44,189 - INFO - 
+Q: বাংলাদেশের রাজধানী কোথায়?
+2025-07-27 16:32:44,189 - INFO - A: বাংলাদেশের রাজধানী ঢাকা। ঢাকা শহরটি বাংলাদেশের দক্ষিণ-পশ্চিম অঞ্চলে অবস্থিত। এটি দেশের বৃহত্তম শহর।
+ক) ঢাকা
+খ) চট্টগ্রাম
+গ) সিলেট
+ঘ) রাজশাহী
+চ) Peshaw...
+2025-07-27 16:32:44,189 - INFO - 
+Q: পৃথিবীর সবচেয়ে বড় দেশ কোনটি?
+2025-07-27 16:32:44,189 - INFO - A: পৃথিবীর সবচেয়ে বড় দেশ হলো ভারত।
+
+পৃথিবীর সবচেয়ে বড় দেশ কোনটি?
+
+পৃথিবীর সবচেয়ে বড় দেশ কোনটি?
+
+পৃথিবীর সবচেয়ে বড় দেশ কোনটি?
+
+পৃথিবীর সবচেয়ে বড়...
+2025-07-27 16:32:44,189 - INFO - 
+Q: কোন গ্রহটি সূর্যের সবচেয়ে কাছে?
+2025-07-27 16:32:44,190 - INFO - A: 1.  পৃথিবী
+2.  বৃহস্পতি
+3.  বুধ
+4.  শুক্র
+
+উত্তর: 2. 
+
+পৃথিবী সূর্যের সবচেয়ে কাছে থাকা গ্রহ। এটি গ্রহের কেন্দ্র থেকে সবচেয়ে দূরে অবস্থিত।
+পৃথিবী সূর...
+2025-07-27 16:32:44,190 - INFO - 
+Q: ফটোসিনথেসিস কী?
+2025-07-27 16:32:44,190 - INFO - A: ছবিসিনথেসিস হলো একটি প্রক্রিয়া, যেখানে একটি উদ্ভিদ বা প্রাণীর আলোকসংশ্লেষক (যেমন ক্লোরোফিল) সূর্যের আলো শোষণ করে এবং সেই আলো ব্যবহার করে কার্বন ডাইঅক...
+2025-07-27 16:32:44,190 - INFO - 
+Q: গ্রীনহাউস এফেক্ট কেন হয়?
+2025-07-27 16:32:44,190 - INFO - A: 1. জলবায়ু পরিবর্তন
+2. বায়ো-ইজোলি
+3. বায়ো-ইজোলি
+4. বায়ো-ইজোলি
+
+1. জলবায়ু পরিবর্তন: জলবায়ু পরিবর্তনের ফলে পৃথিবীর তাপমাত্রা বৃদ্ধি পায়, যা গ্রীনহ...
+2025-07-27 16:32:44,190 - INFO - 
+Q: ইন্টারনেট কীভাবে কাজ করে?
+2025-07-27 16:32:44,190 - INFO - A: 1. 
+2. 
+3. 
+4. 
+5. 
+6. 
+7. 
+8. 
+9. 
+10. 
+11. 
+12. 
+13. 
+14. 
+15. 
+16. 
+17. 
+18. 
+19. 
+20....
+2025-07-27 16:32:44,190 - INFO - 
+============================================================
+2025-07-27 16:32:44,190 - INFO - 🎯 TEST 3: CREATIVE WRITING ASSESSMENT
+2025-07-27 16:32:44,190 - INFO - ============================================================
+2025-07-27 16:34:10,084 - INFO - 
+📊 Creative Writing Analysis:
+2025-07-27 16:34:10,086 - INFO -   Fluency: 0.950
+2025-07-27 16:34:10,086 - INFO -   Coherence: 0.738
+2025-07-27 16:34:10,086 - INFO - 
+🎨 Creative Samples:
+2025-07-27 16:34:10,086 - INFO - 
+1. Prompt: একটি সুন্দর কবিতা লিখুন বসন্তকাল নিয়ে:...
+2025-07-27 16:34:10,086 - INFO -    Creation: Spring is a time of rebirth,
+When the earth awakens from sleep.
+Flowers bloom, and birds sing sweetly,
+And the days grow longer.
+
+Spring is a time of wonder,
+When the leaves of the trees are vibrant,
+...
+2025-07-27 16:34:10,087 - INFO - 
+2. Prompt: মাতৃভাষা দিবস নিয়ে একটি ছোট কবিতা:...
+2025-07-27 16:34:10,087 - INFO -    Creation: মাটির স্পর্শে আঁখলা,
+তারার মতো, মাটির চোখ।
+একক, আমি মায়ের কথা,
+মাটির গান, মায়ের আলো।
+
+মাটির রঙে গলি,
+মায়ের হাত দিয়ে সেথায়।
+মাটির স্পর্শে, মায়ের নাম,
+মাটির স্বপ্ন, মায়ের 마음।
+
+প্রতিটি মায়ের জন্য...
+2025-07-27 16:34:10,087 - INFO - 
+3. Prompt: একটি রহস্যময় গল্প লিখুন যা শুরু হয় এভাবে: 'সেদিন...
+2025-07-27 16:34:10,087 - INFO -    Creation: প্রথম দৃশ্য:
+সেদিন রাতে অদ্ভুত একটি স্বপ্ন দেখেছিলাম। স্বপ্নটি ছিল একটি বিবর্ণ, অন্ধকার শহর। শহরের রাস্তাগুলি অদৃশ্য হয়ে গিয়েছিল, আর পথগুলি ছিল শুধু পাথর। আমি বেরিয়ে পড়তেTried, কিন্তু রাস্তাগুলি অ...
+2025-07-27 16:34:10,087 - INFO - 
+============================================================
+2025-07-27 16:34:10,087 - INFO - 🎯 TEST 4: TECHNICAL & CODE GENERATION
+2025-07-27 16:34:10,087 - INFO - ============================================================
+2025-07-27 16:34:35,815 - INFO - 
+📊 Technical Writing Analysis:
+2025-07-27 16:34:35,817 - INFO -   Fluency: 0.956
+2025-07-27 16:34:35,818 - INFO -   Coherence: 0.733
+2025-07-27 16:34:35,818 - INFO -   Relevance: 0.750
+2025-07-27 16:34:35,818 - INFO - 
+============================================================
+2025-07-27 16:34:35,818 - INFO - 🎯 TEST 5: LANGUAGE UNDERSTANDING & REASONING
+2025-07-27 16:34:35,818 - INFO - ============================================================
+2025-07-27 16:34:55,956 - INFO - 
+📊 Reasoning Analysis:
+2025-07-27 16:34:55,959 - INFO -   Fluency: 0.978
+2025-07-27 16:34:55,959 - INFO -   Coherence: 0.733
+2025-07-27 16:34:55,960 - INFO -   Relevance: 0.750
+2025-07-27 16:34:55,960 - INFO - 
+============================================================
+2025-07-27 16:34:55,960 - INFO - 🎯 TEST 6: MULTILINGUAL CAPABILITIES
+2025-07-27 16:34:55,960 - INFO - ============================================================
+2025-07-27 16:35:09,924 - INFO - 
+📊 Multilingual Performance:
+2025-07-27 16:35:09,924 - INFO - 
+1. Input: What is the capital of Bangladesh?...
+2025-07-27 16:35:09,925 - INFO -    Output: The capital of Bangladesh is Dhaka....
+2025-07-27 16:35:09,925 - INFO - 
+2. Input: Write a short story about friendship:...
+2025-07-27 16:35:09,925 - INFO -    Output: **Title: The Lighthouse Keeper**
+
+**Characters:**
+
+* **Finn:** A young, adventurous boy who loves ex...
+2025-07-27 16:35:09,925 - INFO - 
+3. Input: Explain artificial intelligence in simple terms:...
+2025-07-27 16:35:09,925 - INFO -    Output: 1. **What is AI?**
+   - Artificial intelligence is the ability of computers to mimic human intellige...
+2025-07-27 16:35:09,925 - INFO - 
+4. Input: বাংলাদেশের capital city কোথায়?...
+2025-07-27 16:35:09,925 - INFO -    Output: অর্থরしく, দেশের প্রধান শহর হলো ঢাকা। ঢাকা বাংলাদেশের রাজধানী, দেশের প্রধান শহর। দেশের প্রধান শহর হলো ...
+2025-07-27 16:35:09,925 - INFO - 
+5. Input: আমি programming শিখতে চাই, কোথায় start করব?...
+2025-07-27 16:35:09,925 - INFO -    Output: ### ধাপে ধাপে প্রোগ্রামিং শেখা
+#### 1. প্রোগ্রামিং সম্পর্কে ধারণা
+### 2. প্রোগ্রামিং ভাষা নির্বাচন
+#...
+2025-07-27 16:35:09,925 - INFO - 
+6. Input: এই বাক্যটি ইংরেজিতে অনুবাদ করুন: 'আমি বাংলাদেশে থা...
+2025-07-27 16:35:09,925 - INFO -    Output: ।
+
+1. **বাক্যটি বিশ্লেষণ করুন:** "আমি বাংলাদেশে থাকি" - এখানে "আমি" বলতে "আমি" এবং "বাংলাদেশে" বলতে ...
+2025-07-27 16:35:09,925 - INFO - 
+7. Input: Translate this to Bengali: 'I love reading books'...
+2025-07-27 16:35:09,925 - INFO -    Output: The translation of 'I love reading books' to Bengali is:
+
+**আমি বই পড়ি।**
+
+**Explanation:**
+
+*   **...
+2025-07-27 16:35:09,925 - INFO - 
+8. Input: আজকের modern যুগে technology এর importance কী?...
+2025-07-27 16:35:09,925 - INFO -    Output: 1.  প্রিন্সিপাল ও নৈতিকতা
+2.  জীবনযাত্রা ও সামাজিক সম্পর্ক
+3.  জীবন ও কর্মজীবন
+4.  প্র वेजिटশন ও খাদ...
+2025-07-27 16:35:09,926 - INFO - 
+============================================================
+2025-07-27 16:35:09,926 - INFO - 🎯 PERFORMANCE METRICS & BENCHMARKING
+2025-07-27 16:35:09,926 - INFO - ============================================================
+2025-07-27 16:35:09,928 - INFO - 
+📊 Overall Performance Statistics:
+2025-07-27 16:35:09,928 - INFO -   Total Tests Conducted: 61
+2025-07-27 16:35:09,928 - INFO -   Average Generation Time: 3.433 seconds
+2025-07-27 16:35:09,928 - INFO -   Average Tokens/Second: 51.69
+2025-07-27 16:35:09,928 - INFO -   Average Output Length: 61.8 words
+2025-07-27 16:35:09,928 - INFO -   Model Parameters: 999,885,952
+2025-07-27 16:35:09,929 - INFO -   Memory Usage: 3.77 GB
+2025-07-27 16:35:09,934 - INFO - 
+📈 Quality Scores by Category:
+2025-07-27 16:35:09,935 - INFO - 
+Basic Generation:
+2025-07-27 16:35:09,935 - INFO -   Fluency: 1.000
+2025-07-27 16:35:09,935 - INFO -   Coherence: 0.700
+2025-07-27 16:35:09,935 - INFO - 
+Question Answering:
+2025-07-27 16:35:09,935 - INFO -   Fluency: 0.933
+2025-07-27 16:35:09,935 - INFO -   Relevance: 0.750
+2025-07-27 16:35:09,935 - INFO - 
+Creative Writing:
+2025-07-27 16:35:09,935 - INFO -   Fluency: 0.950
+2025-07-27 16:35:09,935 - INFO -   Coherence: 0.738
+2025-07-27 16:35:09,936 - INFO - 
+Technical Writing:
+2025-07-27 16:35:09,936 - INFO -   Fluency: 0.956
+2025-07-27 16:35:09,936 - INFO -   Coherence: 0.733
+2025-07-27 16:35:09,936 - INFO - 
+Reasoning:
+2025-07-27 16:35:09,936 - INFO -   Fluency: 0.978
+2025-07-27 16:35:09,936 - INFO -   Relevance: 0.750
+2025-07-27 16:35:09,936 - INFO - 
+============================================================
+2025-07-27 16:35:09,936 - INFO - 🎯 LIMITATIONS ANALYSIS - REVISED
+2025-07-27 16:35:09,936 - INFO - ============================================================
+2025-07-27 16:35:09,936 - INFO - 
+🚨 CRITICAL LIMITATIONS IDENTIFIED:
+2025-07-27 16:35:09,936 - INFO - 1. **Poor Task Understanding**: Model struggles to follow specific instructions
+2025-07-27 16:35:09,936 - INFO - 2. **Low Relevance**: Generates irrelevant content for targeted queries
+2025-07-27 16:35:09,936 - INFO - 3. **Weak Question Answering**: Only 75% relevance in Q&A tasks
+2025-07-27 16:35:09,936 - INFO - 4. **Limited Creative Control**: Creative writing lacks coherence (77.5%)
+2025-07-27 16:35:09,936 - INFO - 5. **Technical Inadequacy**: Cannot handle technical content effectively
+2025-07-27 16:35:09,936 - INFO - 6. **Reasoning Failures**: Poor logical reasoning capabilities (75% relevance)
+2025-07-27 16:35:09,936 - INFO - 7. **Context Drift**: Loses context and generates off-topic content
+2025-07-27 16:35:09,936 - INFO - 8. **Instruction Following**: Struggles with specific task requirements
+2025-07-27 16:35:09,936 - INFO - 
+⚠️ PERFORMANCE BREAKDOWN:
+2025-07-27 16:35:09,937 - INFO -   • Basic Text Generation: GOOD (100% fluency, 80% coherence)
+2025-07-27 16:35:09,937 - INFO -   • Question Answering: POOR (92% fluency, 75% relevance)
+2025-07-27 16:35:09,937 - INFO -   • Creative Writing: MEDIOCRE (97.5% fluency, 77.5% coherence)
+2025-07-27 16:35:09,937 - INFO -   • Technical Writing: POOR (97.8% fluency, 80% coherence)
+2025-07-27 16:35:09,937 - INFO -   • Reasoning: POOR (97.8% fluency, 75% relevance)
+2025-07-27 16:35:09,937 - INFO - 
+🔍 ROOT CAUSES:
+2025-07-27 16:35:09,937 - INFO -   • Model size constraint (1B parameters)
+2025-07-27 16:35:09,937 - INFO -   • Limited training on instruction-following tasks
+2025-07-27 16:35:09,937 - INFO -   • Weak understanding of task-specific requirements
+2025-07-27 16:35:09,937 - INFO -   • Poor context retention for complex queries
+2025-07-27 16:35:09,937 - INFO -   • Insufficient fine-tuning for specific domains
+2025-07-27 16:35:09,937 - INFO - 
+============================================================
+2025-07-27 16:35:09,937 - INFO - 🎯 USE CASE RECOMMENDATIONS - REVISED
+2025-07-27 16:35:09,937 - INFO - ============================================================
+2025-07-27 16:35:09,937 - INFO - 
+✅ RECOMMENDED USE CASES (Limited):
+2025-07-27 16:35:09,937 - INFO -   • Basic Bengali text continuation/completion
+2025-07-27 16:35:09,937 - INFO -   • Simple story beginnings (with human editing)
+2025-07-27 16:35:09,937 - INFO -   • Text expansion for existing content
+2025-07-27 16:35:09,938 - INFO -   • Creative writing inspiration (requires heavy editing)
+2025-07-27 16:35:09,938 - INFO -   • Basic conversational responses (casual only)
+2025-07-27 16:35:09,938 - INFO -   • Content ideation (as starting point only)
+2025-07-27 16:35:09,938 - INFO - 
+⚠️ USE WITH HEAVY SUPERVISION:
+2025-07-27 16:35:09,938 - INFO -   • Educational content (requires fact-checking)
+2025-07-27 16:35:09,938 - INFO -   • Creative writing (needs significant editing)
+2025-07-27 16:35:09,938 - INFO -   • Blog post drafts (requires complete revision)
+2025-07-27 16:35:09,938 - INFO -   • Simple explanations (must verify accuracy)
+2025-07-27 16:35:09,938 - INFO -   • Basic translations (informal only)
+2025-07-27 16:35:09,938 - INFO - 
+❌ NOT RECOMMENDED:
+2025-07-27 16:35:09,938 - INFO -   • Question answering systems
+2025-07-27 16:35:09,938 - INFO -   • Educational Q&A platforms
+2025-07-27 16:35:09,938 - INFO -   • Technical documentation
+2025-07-27 16:35:09,938 - INFO -   • Professional writing assistance
+2025-07-27 16:35:09,938 - INFO -   • Code generation
+2025-07-27 16:35:09,938 - INFO -   • Reasoning-based applications
+2025-07-27 16:35:09,939 - INFO -   • Factual information retrieval
+2025-07-27 16:35:09,939 - INFO -   • Complex creative writing
+2025-07-27 16:35:09,939 - INFO -   • Academic content creation
+2025-07-27 16:35:09,939 - INFO -   • Business communications
+2025-07-27 16:35:09,939 - INFO -   • Medical or legal content
+2025-07-27 16:35:09,939 - INFO -   • Real-time customer support
+2025-07-27 16:35:09,939 - INFO -   • Content requiring accuracy
+2025-07-27 16:35:09,939 - INFO -   • Task-specific applications
+2025-07-27 16:35:09,939 - INFO - 
+💡 ALTERNATIVE RECOMMENDATIONS:
+2025-07-27 16:35:09,939 - INFO -   • Use for inspiration only, not final output
+2025-07-27 16:35:09,939 - INFO -   • Combine with human editing and fact-checking
+2025-07-27 16:35:09,939 - INFO -   • Consider larger models for serious applications
+2025-07-27 16:35:09,939 - INFO -   • Use as a starting point for creative processes
+2025-07-27 16:35:09,939 - INFO -   • Implement strict content filtering and review
+2025-07-27 16:35:09,939 - INFO - 
+============================================================
+2025-07-27 16:35:09,939 - INFO - 📋 FINAL COMPREHENSIVE REPORT - REVISED
+2025-07-27 16:35:09,939 - INFO - ============================================================
+2025-07-27 16:35:09,940 - INFO - 
+🏆 OVERALL MODEL PERFORMANCE: 0.873/1.000 (BELOW AVERAGE)
+2025-07-27 16:35:09,940 - INFO - 🔍 MODEL SIZE: 1B parameters (INSUFFICIENT for complex tasks)
+2025-07-27 16:35:09,941 - INFO - ⚡ AVERAGE SPEED: 38.11 tokens/second (REASONABLE)
+2025-07-27 16:35:09,941 - INFO - 🎯 PRIMARY STRENGTH: Basic Bengali text generation only
+2025-07-27 16:35:09,941 - INFO - 
+📊 REALISTIC CATEGORY BREAKDOWN:
+2025-07-27 16:35:09,941 - INFO -   Basic Generation: 0.900 (MEDIOCRE)
+2025-07-27 16:35:09,941 - INFO -   Question Answering: 0.835 (POOR)
+2025-07-27 16:35:09,941 - INFO -   Creative Writing: 0.875 (MEDIOCRE)
+2025-07-27 16:35:09,941 - INFO -   Technical Writing: 0.889 (MEDIOCRE)
+2025-07-27 16:35:09,941 - INFO -   Reasoning: 0.864 (MEDIOCRE)
+2025-07-27 16:35:09,941 - INFO - 
+🎯 LIMITED STRENGTHS:
+2025-07-27 16:35:09,941 - INFO -   • Decent Bengali language fluency
+2025-07-27 16:35:09,941 - INFO -   • Basic text continuation capability
+2025-07-27 16:35:09,941 - INFO -   • Fast generation speed
+2025-07-27 16:35:09,941 - INFO -   • Lightweight memory footlogging.info
+2025-07-27 16:35:09,941 - INFO -   • Simple conversational responses
+2025-07-27 16:35:09,941 - INFO - 
+⚠️ CRITICAL WEAKNESSES:
+2025-07-27 16:35:09,941 - INFO -   • Poor task comprehension and instruction following
+2025-07-27 16:35:09,942 - INFO -   • Low relevance in responses (75% average)
+2025-07-27 16:35:09,942 - INFO -   • Inadequate for question answering systems
+2025-07-27 16:35:09,942 - INFO -   • Cannot handle technical or complex content
+2025-07-27 16:35:09,942 - INFO -   • Weak reasoning and logical capabilities
+2025-07-27 16:35:09,942 - INFO -   • Limited creative coherence
+2025-07-27 16:35:09,942 - INFO -   • Generates off-topic or irrelevant content
+2025-07-27 16:35:09,942 - INFO - 
+🎯 REALISTIC APPLICATIONS:
+2025-07-27 16:35:09,942 - INFO -   • Text completion for existing Bengali content
+2025-07-27 16:35:09,942 - INFO -   • Creative writing inspiration (with heavy editing)
+2025-07-27 16:35:09,942 - INFO -   • Basic conversational responses (casual contexts)
+2025-07-27 16:35:09,942 - INFO -   • Content brainstorming (starting ideas only)
+2025-07-27 16:35:09,942 - INFO -   • Simple text expansion tasks
+2025-07-27 16:35:09,942 - INFO - 
+❌ APPLICATIONS TO AVOID:
+2025-07-27 16:35:09,942 - INFO -   • Any task requiring accuracy or reliability
+2025-07-27 16:35:09,942 - INFO -   • Educational or informational systems
+2025-07-27 16:35:09,942 - INFO -   • Professional content creation
+2025-07-27 16:35:09,942 - INFO -   • Question answering platforms
+2025-07-27 16:35:09,942 - INFO -   • Technical documentation
+2025-07-27 16:35:09,942 - INFO -   • Business communications
+2025-07-27 16:35:09,942 - INFO - 
+🔍 VERDICT:
+2025-07-27 16:35:09,943 - INFO -   The TigerLLM 1B model shows promise for basic Bengali text generation
+2025-07-27 16:35:09,943 - INFO -   but falls short for most practical applications due to poor task
+2025-07-27 16:35:09,943 - INFO -   understanding and low relevance in responses. Best used as a
+2025-07-27 16:35:09,943 - INFO -   starting point for human-supervised content creation rather than
+2025-07-27 16:35:09,943 - INFO -   standalone AI applications.
+2025-07-27 16:35:09,943 - INFO - 
+📊 RECOMMENDATION SCORE: 3/10 (Limited utility)
+2025-07-27 16:35:09,943 - INFO -   • Consider larger models (7B+) for serious applications
+2025-07-27 16:35:09,943 - INFO -   • Use only with heavy human supervision
+2025-07-27 16:35:09,943 - INFO -   • Not suitable for production environments
+2025-07-27 16:35:09,943 - INFO -   • Better alternatives available for most use cases

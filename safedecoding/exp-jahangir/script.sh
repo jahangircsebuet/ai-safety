@@ -46,6 +46,15 @@
 # test multijail dataset
 # CUDA_VISIBLE_DEVICES=2 python multijail_dataset.py
 
-CUDA_VISIBLE_DEVICES=2 python test_tiger.py
+# CUDA_VISIBLE_DEVICES=2 python tigerllm.py
+
+# CUDA_VISIBLE_DEVICES=2 python test_tigerllm_multijail_bn.py
+
+
+# CUDA_VISIBLE_DEVICES=2 python test_pangea_multijail_bn.py
+
+# CUDA_VISIBLE_DEVICES=2 python test_pangea_catqa_bn.py
+
+# CUDA_VISIBLE_DEVICES=2 python test_tigerllm_catqa_bn.py
 
 
